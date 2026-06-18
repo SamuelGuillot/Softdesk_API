@@ -27,4 +27,7 @@ urlpatterns = [
     path("api/", include("issues.urls")),
     path("api/token/", TokenObtainPairView.as_view(), name="obtain_tokens"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
+    path('silk/', include('silk.urls', namespace='silk')),
 ]
+
+

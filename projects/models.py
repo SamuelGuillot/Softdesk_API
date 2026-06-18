@@ -23,6 +23,7 @@ class Project(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="owned_projects",
+        #  (user.owned_projects.all())
     )
 
     contributors = models.ManyToManyField(

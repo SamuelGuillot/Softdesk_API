@@ -16,7 +16,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "contributors",
             "created_time",
         )
-        read_only_fields = ("created_time", "contributors")
+        read_only_fields = ("created_time", "contributors", "author")
 
 
 class ContributorSerializer(serializers.ModelSerializer):

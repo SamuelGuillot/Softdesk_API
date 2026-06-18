@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
             first_name=validated_data.get("first_name", ""),
             last_name=validated_data.get("last_name", ""),
-            age=validated_data.get("age"),
+            age=validated_data["age"],
             can_be_contacted=validated_data.get("can_be_contacted", False),
             can_data_be_shared=validated_data.get("can_data_be_shared", False),
         )
