@@ -1,4 +1,4 @@
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -20,9 +20,7 @@ class UserViewSet(ModelViewSet):
             return [AllowAny()]
         return [IsAuthenticated(), IsSelf()]
 
-
     def list(self, request, *args, **kwargs):
         return Response(
-            {"detail": "Action non autorisée"},
-            status=403
-        ) # interdiction de reqquest une liste
+            {"detail": "Action non autorisée"}, status=403
+        )  # interdiction de request une liste

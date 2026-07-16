@@ -3,8 +3,17 @@ from issues.models import Issue, Comment
 from projects.models import Contributor
 
 
-class IssueSerializer(serializers.ModelSerializer):
+class IssueListSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source="author.username")
+
+    class Meta:
+        model = Issue
+        fields = ("id", "title", "status", "priority", "author")
+
+
+class IssueDetailSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source="author.username")
+    assignee_username = serializers.ReadOnlyField(source="assignee.username")
 
     class Meta:
         model = Issue
@@ -12,18 +21,40 @@ class IssueSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "description",
-            "project",
             "author",
             "assignee",
+            "assignee_username",
             "priority",
             "tag",
             "status",
             "created_time",
         )
-        read_only_fields = ("created_time",)
+        read_only_fields = (
+            "created_time",
+            "project",
+        )
+
+    def validate_assignee(self, value):
+        project = self.context["project"]
+        if not Contributor.objects.filter(
+            project=project,
+            user=value,
+        ).exists():
+            raise serializers.ValidationError(
+                "Assignee must be a contributor."
+            )
+        return value
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentListSerializer(serializers.ModelSerializer):
+    author = serializers.ReadOnlyField(source="author.username")
+
+    class Meta:
+        model = Comment
+        fields = ("id", "description", "author", "created_time")
+
+
+class CommentDetailSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source="author.username")
 
     class Meta:
@@ -32,8 +63,7 @@ class CommentSerializer(serializers.ModelSerializer):
             "id",
             "uuid",
             "description",
-            "issue",
             "author",
             "created_time",
         )
-        read_only_fields = ("created_time", "uuid")
+        read_only_fields = ("created_time", "uuid", "issue")
